@@ -1,11 +1,12 @@
 import { Router } from "express";
 import userController from "../controllers/user.controller.js";
-
+import verifyJWT from "../middlewares/auth.middleware.js";
 const router = Router();
 
-router.get("/", userController.getAllUsers);
-router.get("/profile", userController.getProfile);
-router.put("/profile", userController.updateProfile);
-router.delete("/:id", userController.deleteUser);
+router.get("/profile", verifyJWT, userController.getProfile);
+router.put("/profile", verifyJWT, userController.updateProfile);
+router.delete("/profile", verifyJWT, userController.deleteUser);
+router.put("/password", verifyJWT, userController.changePassword);
+router.get("/all", verifyJWT, userController.getAllUsers);
 
 export default router;

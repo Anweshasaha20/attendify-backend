@@ -3,7 +3,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const validateEnv = () => {
-  const requiredVars = ['PORT', 'DATABASE_URL'];
+  const requiredVars = [
+    "PORT",
+    "DATABASE_URL",
+    "JWT_SECRET",
+    "JWT_REFRESH_SECRET",
+  ];
   const envVars = {};
   const missing = [];
 
@@ -14,13 +19,17 @@ const validateEnv = () => {
       envVars[key] = process.env[key];
     }
   }
-  
+
   if (missing.length > 0) {
-    console.error('> ❌ Invalid/Missing environment variables:', missing.join(', '));
+    console.error(
+      "> ❌ Invalid/Missing environment variables:",
+      missing.join(", ")
+    );
     process.exit(1);
   }
-  
+
   return envVars;
 };
 
-export const { PORT, DB_URL } = validateEnv();
+export const { PORT, DATABASE_URL, JWT_SECRET, JWT_REFRESH_SECRET } =
+  validateEnv();

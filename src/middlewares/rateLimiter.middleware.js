@@ -1,5 +1,5 @@
 import rateLimit from "express-rate-limit";
-import { ApiError } from "../utils/apiError.js";
+import ApiError  from "../utils/apiError.js";
 
 // Define the rate limiter
 const apiRateLimiter = rateLimit({
@@ -10,4 +10,4 @@ const apiRateLimiter = rateLimit({
   message: ApiError.rateLimitExceeded(),
 });
 
-export { apiRateLimiter };
+export default apiRateLimiter;

@@ -1,4 +1,4 @@
-import { ApiResponse } from "./apiResponse.js";
+import ApiResponse from "./apiResponse.js";
 
 const asyncHandler = (asyncFn) => {
   return async (req, res, next) => {
@@ -26,7 +26,13 @@ const asyncHandler = (asyncFn) => {
       // Send the response with meta data
       return res
         .status(errorDetails.statusCode)
-        .json(ApiResponse.error(errorDetails.message, errorDetails.statusCode, errorDetails.stack));
+        .json(
+          ApiResponse.error(
+            errorDetails.message,
+            errorDetails.statusCode,
+            errorDetails.stack
+          )
+        );
     }
   };
 };

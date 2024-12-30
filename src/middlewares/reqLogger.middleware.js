@@ -1,6 +1,6 @@
 import os from "os";
 
-export const reqLogger = (req, res, next) => {
+const reqLogger = (req, res, next) => {
   if (process.env.NODE_ENV === "development") {
     // Attach the request time to the request object
     req.requestTime = new Date().toLocaleString();
@@ -35,3 +35,5 @@ export const reqLogger = (req, res, next) => {
   // Proceed to the next middleware or route handler
   next();
 };
+
+export default reqLogger;

@@ -1,7 +1,7 @@
 class ApiError extends Error {
   constructor(
     statusCode,
-    message = "Something went wrong",
+    message = "An unexpected error occurred.",
     errors = [],
     data = null,
     stack = ""
@@ -23,24 +23,40 @@ class ApiError extends Error {
   }
 
   // Factory methods for common error types
-  static badRequest(message = "Bad Request", errors = [], data = null) {
+  static badRequest(
+    message = "The request could not be understood or was missing required parameters.",
+    errors = [],
+    data = null
+  ) {
     return new ApiError(400, message, errors, data);
   }
 
-  static unauthorized(message = "Unauthorized", errors = [], data = null) {
+  static unauthorized(
+    message = "Authentication is required or has failed.",
+    errors = [],
+    data = null
+  ) {
     return new ApiError(401, message, errors, data);
   }
 
-  static forbidden(message = "Forbidden", errors = [], data = null) {
+  static forbidden(
+    message = "You do not have permission to access this resource.",
+    errors = [],
+    data = null
+  ) {
     return new ApiError(403, message, errors, data);
   }
 
-  static notFound(message = "Resource Not Found", errors = [], data = null) {
+  static notFound(
+    message = "The requested resource could not be found.",
+    errors = [],
+    data = null
+  ) {
     return new ApiError(404, message, errors, data);
   }
 
   static validationError(
-    message = "Validation Error",
+    message = "The request data is invalid or does not meet the required format.",
     errors = [],
     data = null
   ) {
@@ -48,15 +64,27 @@ class ApiError extends Error {
   }
 
   static internalError(
-    message = "Internal Server Error",
+    message = "An internal server error occurred. Please try again later.",
     errors = [],
     data = null
   ) {
     return new ApiError(500, message, errors, data);
   }
 
-  static rateLimitExceeded(message = "Too many requests, please try again after 15 minutes.", errors = [], data = null) {
+  static rateLimitExceeded(
+    message = "Too many requests. Please try again later.",
+    errors = [],
+    data = null
+  ) {
     return new ApiError(429, message, errors, data);
+  }
+
+  static conflict(
+    message = "A conflict occurred. The resource already exists.",
+    errors = [],
+    data = null
+  ) {
+    return new ApiError(409, message, errors, data);
   }
 
   // Converts the error object to a JSON response
@@ -72,4 +100,4 @@ class ApiError extends Error {
   }
 }
 
-export { ApiError };
+export default ApiError;
