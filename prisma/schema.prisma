@@ -8,50 +8,57 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  fullName  String
-  email     String   @unique
-  username  String   @unique
-  password  String  
-  refreshToken String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  // enrollments   Class[]         @relation("Enrollments")
-  // attendanceLog AttendanceLog[]
-  // adminOf       Class[]         @relation("AdminClasses")
+  id                  String          @id @default(uuid())
+  fullName            String
+  email               String          @unique
+  username            String          @unique
+  password            String
+  refreshToken        String?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  enrolledClasses     Class[]         @relation("Enrollment")
+  administeredClasses Class[]         @relation("Administration")
+  attendanceLogs      AttendanceLog[] @relation("UserAttendance")
+  AttendanceLog       AttendanceLog[]
+
+  @@index([email])
 }
 
-// model Class {
-//   id          String    @id @default(uuid())
-//   name        String
-//   description String?
-//   admin       User      @relation("AdminClasses", fields: [adminId], references: [id], onDelete: Cascade)
-//   adminId     String
-//   sessions    Session[]
-//   students    User[]    @relation("Enrollments")
+model Class {
+  id           String    @id @default(uuid())
+  name         String
+  description  String?
+  admin        User      @relation("Administration", fields: [adminId], references: [id], onDelete: Cascade)
+  adminId      String
+  participants User[]    @relation("Enrollment")
+  sessions     Session[]
 
-//   @@index([adminId])
-// }
+  @@index([adminId])
+}
 
-// model Session {
-//   id            String          @id @default(uuid())
-//   name          String
-//   class         Class           @relation(fields: [classId], references: [id], onDelete: Cascade)
-//   classId       String
-//   startTime     DateTime
-//   endTime       DateTime
-//   createdAt     DateTime        @default(now())
-//   updatedAt     DateTime        @updatedAt
-//   attendanceLog AttendanceLog[]
+model Session {
+  id             String          @id @default(uuid())
+  name           String
+  class          Class           @relation(fields: [classId], references: [id], onDelete: Cascade)
+  classId        String
+  startTime      DateTime
+  duration       Int
+  endTime        DateTime
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  attendanceLogs AttendanceLog[] @relation("SessionAttendance")
 
-//   @@index([classId])
-// }
+  @@index([classId])
+}
 
-// model AttendanceLog {
-//   id         String   @id @default(uuid())
-//   attendee   User     @relation(fields: [attendeeId], references: [id], onDelete: Cascade)
-//   attendeeId String
-//   session    Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-//   sessionId  String
-//   timestamp  DateTime @default(now())
-// }
+model AttendanceLog {
+  id         String   @id @default(uuid())
+  attendee   User     @relation("UserAttendance", fields: [attendeeId], references: [id], onDelete: Cascade)
+  attendeeId String
+  session    Session @relation("SessionAttendance", fields: [sessionId], references: [id], onDelete: Cascade)  
+  sessionId  String  
+  timestamp  DateTime @default(now())
+  User       User?    @relation(fields: [userId], references: [id])
+  userId     String?
+  @@index([attendeeId, sessionId])
+}
