@@ -20,10 +20,8 @@ const asyncHandler = (asyncFn) => {
         timestamp: new Date().toISOString(),
       };
 
-      // Log the structured error details
       console.error(JSON.stringify(errorDetails, null, 2));
 
-      // Send the response with meta data
       return res
         .status(errorDetails.statusCode)
         .json(

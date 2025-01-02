@@ -2,10 +2,9 @@ import os from "os";
 
 const reqLogger = (req, res, next) => {
   if (process.env.NODE_ENV === "development") {
-    // Attach the request time to the request object
+
     req.requestTime = new Date().toLocaleString();
 
-    // Structure the detailed request report
     const requestReport = {
       request: {
         timestamp: req.requestTime,
@@ -26,13 +25,11 @@ const reqLogger = (req, res, next) => {
       },
     };
 
-    // Log the structured request report
     console.log("========== Incoming Request ==========");
     console.log(JSON.stringify(requestReport, null, 2));
     console.log("======================================");
   }
 
-  // Proceed to the next middleware or route handler
   next();
 };
 
