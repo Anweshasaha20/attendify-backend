@@ -22,14 +22,14 @@ class ApiResponse {
   static error(
     message = "An unexpected error occurred",
     status = 500,
-    meta = null
+    meta = null,
   ) {
     return new ApiResponse({
       data: null,
       message:
         process.env.NODE_ENV === "development"
           ? message
-          : "An unexpected error occurred. Please try again later.",
+          : ":( An unexpected error occurred. Please try again later.",
       status,
       success: false,
       meta,

@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Status {
+  pending
+  accepted
+  rejected
+  blocked
+}
+
 model User {
   id                  String          @id @default(uuid())
   fullName            String
@@ -19,7 +26,7 @@ model User {
   enrolledClasses     Class[]         @relation("ClassEnrollments")
   administeredClasses Class[]         @relation("ClassAdministrations")
   attendanceLogs      AttendanceLog[] @relation("UserAttendanceLogs")
-  joinRequests        JoinRequest[]
+  joinRequests        JoinRequest[]   @relation("requestedUser")
   notifications       Notification[]  @relation("UserNotifications")
 
   @@index([email])
@@ -35,7 +42,7 @@ model Class {
   admins        User[]         @relation("ClassAdministrations")
   participants  User[]         @relation("ClassEnrollments")
   sessions      Session[]
-  joinRequests  JoinRequest[]
+  joinRequests  JoinRequest[]  @relation("requestedClass")
   notifications Notification[] @relation("ClassNotifications")
 }
 
@@ -71,14 +78,16 @@ model AttendanceLog {
 // A user can request to join a class
 model JoinRequest {
   id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation("requestedUser", fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  class     Class    @relation("requestedClass", fields: [classId], references: [id], onDelete: Cascade)
   classId   String
+  status    Status   @default(pending)
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-// Notifications can be sent to users or classes 
+// Notifications can be sent to users or classes
 // if user is null, then the notification is for the class or vice versa
 model Notification {
   id        String   @id @default(uuid())

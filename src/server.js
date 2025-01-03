@@ -17,15 +17,6 @@ app.use(reqLogger);
 
 app.use("/api/v1", apiRateLimiter, routes);
 
-app.get("/", (req, res) => {
-  //to test if the server is up and running
-  return res
-    .status(200)
-    .json(
-      ApiResponse.success({ message: "🧑‍💻 Attendify server is running..." })
-    );
-});
-
 app.listen(PORT, () => {
   console.log(`
 ╭───────────────────────────────────────────────╮
@@ -34,7 +25,7 @@ app.listen(PORT, () => {
 │ 🚀 Status:           RUNNING                  │
 │  🌐 Address:          https://localhost:${PORT}  │
 │ 📝 Environment:      ${process.env.NODE_ENV || "development"}              │
-│ ⏰ Start Time:       ${new Date().toLocaleString()}   │
+│ ⏰ Start Time:       ${new Date().toLocaleString()}    │
 │ 📡 API Endpoint:     /api/v1                  │
 ╰───────────────────────────────────────────────╯
 `);

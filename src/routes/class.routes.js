@@ -4,13 +4,22 @@ import verifyJWT from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-// Class Management
-router.post("/create", verifyJWT ,classController.create); 
-// router.post("/join", classController.joinClass); // Participant joins a class via invitation code/link
-// router.get("/", classController.getAllClasses); // Get all classes the user is associated with
-// router.get("/:id", classController.getClassDetails); // Get details of a specific class
-// router.put("/:id", classController.updateClass); // Update a class (admin only)
-// router.delete("/:id", classController.deleteClass); // Delete a class (admin only)
+// Admin's Class Management
+router.post("/create", verifyJWT, classController.createClass);
+router.get("/:code", verifyJWT, classController.getClassDetails);
+router.put("/:code", verifyJWT, classController.updateClass);
+router.delete("/:code", verifyJWT, classController.deleteClass);
+
+router.get("/requests/:code", verifyJWT, classController.getAllJoinRequests);
+router.get("/:requestId/accept", verifyJWT, classController.acceptRequest);
+router.get("/:requestId/reject", verifyJWT, classController.rejectRequest);
+//router.get("/:requestId/block", verifyJWT, classController.blockRequest);
+//router.get("/:requestId/unblock", verifyJWT, classController.unblockRequest);
+
+// Participant's Class Management
+router.get("/:userId/joinReq", verifyJWT, classController.requestToJoin);
+router.get("/:code/join", verifyJWT, classController.joinClass);
+router.get("/:code/leave", verifyJWT, classController.leaveClass);
 
 // // Participants Management
 // router.get("/:id/participants", classController.getParticipants); // Get participants of a class

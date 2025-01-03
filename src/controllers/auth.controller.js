@@ -16,7 +16,7 @@ class AuthController {
     const validationResult = registerSchema.safeParse(req.body);
     if (!validationResult.success) {
       const errorMessages = validationResult.error.errors.map(
-        (err) => err.message
+        (err) => err.message,
       );
       throw ApiError.badRequest(errorMessages.join(", "));
     }
@@ -85,19 +85,21 @@ class AuthController {
     // Generate JWT tokens
     const { accessToken, refreshToken } = await generateTokens(
       user.id,
-      rememberForAMonth === true
+      rememberForAMonth === true,
     );
 
-    const filteredUser = { ...user, password: undefined };
+    const filteredUser = {
+      ...user,
+      password: undefined,
+      refreshToken: undefined,
+    };
 
     // Return the user data without the password
 
     res
       .cookie("refreshToken", refreshToken, cookieOptions)
       .cookie("accessToken", accessToken, cookieOptions)
-      .json(
-        ApiResponse.success(filteredUser , "User logged in successfully")
-      );
+      .json(ApiResponse.success(filteredUser, "User logged in successfully"));
   });
 
   logout = asyncHandler(async (req, res) => {

@@ -11,7 +11,7 @@ const validateEnv = () => {
   ];
   const envVars = {};
   const missing = [];
-
+  console.log("> Loading environment variables... from .env file");
   for (const key of requiredVars) {
     if (!process.env[key]) {
       missing.push(key);

@@ -22,15 +22,13 @@ const asyncHandler = (asyncFn) => {
 
       console.error(JSON.stringify(errorDetails, null, 2));
 
-      return res
-        .status(errorDetails.statusCode)
-        .json(
-          ApiResponse.error(
-            errorDetails.message,
-            errorDetails.statusCode,
-            errorDetails.stack
-          )
-        );
+      return res.status(errorDetails.statusCode).json(
+        ApiResponse.error(
+          errorDetails.message,
+          errorDetails.statusCode,
+          // errorDetails.stack
+        ),
+      );
     }
   };
 };
