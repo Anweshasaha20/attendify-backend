@@ -1,6 +1,7 @@
 import { Router } from "express";
 import authRoutes from "./auth.routes.js";
 import userRoutes from "./user.routes.js";
+import sessionRoutes from "./session.routes.js";
 import attendanceRoutes from "./attendance.routes.js";
 import classRoutes from "./class.routes.js";
 import ApiResponse from "../utils/apiResponse.js";
@@ -9,6 +10,7 @@ const router = Router();
 router.use("/auth", authRoutes);
 router.use("/user", userRoutes);
 router.use("/class", classRoutes);
+router.use("/session", sessionRoutes);
 router.use("/attendance", attendanceRoutes);
 
 router.get("/", (req, res) => {
@@ -16,7 +18,7 @@ router.get("/", (req, res) => {
   return res
     .status(200)
     .json(
-      ApiResponse.success({ message: "🧑‍💻 Attendify server is running..." }),
+      ApiResponse.success({ message: "🧑‍💻 Attendify server is running..." })
     );
 });
 
