@@ -56,7 +56,7 @@ model Session {
   description    String?
   class          Class           @relation(fields: [classId], references: [id], onDelete: Cascade)
   classId        String
-  startTime      DateTime
+  startTime      DateTime        @default(now())
   duration       Int
   endTime        DateTime
   createdAt      DateTime        @default(now())

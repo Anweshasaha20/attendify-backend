@@ -85,6 +85,61 @@ class UserController {
         ApiResponse.success(filteredUsers, "All users fetched successfully")
       );
   });
+
+  getUpcomingSessions = asyncHandler(async (req, res) => {
+    const userId = req.user; // Get the user ID from the authenticated user
+
+    // Get the user's enrolled and administered classes with their sessions
+    const userWithClasses = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        enrolledClasses: {
+          include: {
+            sessions: true, // Include the sessions of the enrolled classes
+          },
+        },
+        administeredClasses: {
+          include: {
+            sessions: true, // Include the sessions of the administered classes
+          },
+        },
+      },
+    });
+
+    if (!userWithClasses) {
+      return res.status(404).json(ApiResponse.error("User not found"));
+    }
+
+    // Combine sessions from both enrolled and administered classes
+    const allSessions = [
+      ...userWithClasses.enrolledClasses.flatMap(
+        (classItem) => classItem.sessions
+      ),
+      ...userWithClasses.administeredClasses.flatMap(
+        (classItem) => classItem.sessions
+      ),
+    ];
+
+    // Filter sessions that are upcoming (future sessions)
+    const upcomingSessions = allSessions.filter((session) => {
+      const currentTime = new Date();
+      return session.startTime > currentTime;
+    });
+
+    // Sort the upcoming sessions by start time
+    upcomingSessions.sort(
+      (a, b) => a.startTime.getTime() - b.startTime.getTime()
+    );
+
+    return res
+      .status(200)
+      .json(
+        ApiResponse.success(
+          upcomingSessions,
+          `${upcomingSessions.length} Upcoming sessions fetched successfully`
+        )
+      );
+  });
 }
 
 export default new UserController();

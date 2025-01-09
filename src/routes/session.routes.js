@@ -32,6 +32,8 @@ router.post(
   sessionController.verifyOTP
 ); // Insert OTP for attendance
 
+// router.get("/user/upcoming", sessionController.getUpcomingSessionsForUser); // Get upcoming sessions for a user
+
 // // Attendance Management
 // router.get("/:id/attendance", classController.getAttendanceLogs); // Get attendance logs for a class
 // router.get("/:id/absent", classController.getAbsentStudents); // Get a list of absent students for a class

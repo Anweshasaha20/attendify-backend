@@ -76,15 +76,20 @@ class sessionController {
       throw ApiError.unauthorized("You are not an admin of this class");
 
     // validate request
-    const { error } = sessionSchema.safeParse(req.body);
-    if (error) throw ApiError.badRequest(error.message);
+    const parsed = sessionSchema.safeParse(req.body);
+    if (!parsed.success) throw ApiError.badRequest(parsed.error.message);
 
+    // Set default startTime to now if not provided
+    const { startTime, duration, ...rest } = req.body;
+    const currentStartTime = startTime ? new Date(startTime) : new Date();
     const response = await prisma.session.create({
       data: {
-        ...req.body,
-        startTime: new Date(),
-
-        endTime: new Date(Date.now() + req.body.duration * 60000),
+        ...rest,
+        startTime: currentStartTime,
+        duration: duration,
+        endTime: new Date(
+          new Date(currentStartTime).getTime() + duration * 60000
+        ),
 
         class: {
           connect: {
@@ -130,12 +135,20 @@ class sessionController {
     const { error } = sessionSchema.safeParse(req.body);
     if (error) throw ApiError.badRequest(error.message);
 
+    const { startTime } = req.body; //checking if startTime is provided
+
     const response = await prisma.session.update({
       where: {
         id: sessionId,
       },
       data: {
         ...req.body,
+
+        endTime:
+          startTime &&
+          new Date(
+            new Date(req.body.startTime).getTime() + req.body.duration * 60000
+          ),
       },
     });
 
@@ -186,6 +199,7 @@ class sessionController {
   createOTP = asyncHandler(async (req, res) => {
     const { classId, sessionId } = req.params;
     const userId = req.user;
+    console.log(userId);
 
     if (!classId || !sessionId)
       throw ApiError.badRequest("Class ID and Session ID are required");
