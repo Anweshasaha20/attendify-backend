@@ -17,7 +17,7 @@ router.get("/:requestId/reject", verifyJWT, classController.rejectRequest);
 //router.get("/:requestId/unblock", verifyJWT, classController.unblockRequest);
 
 // Participant's Class Management
-router.get("/:userId/joinReq", verifyJWT, classController.requestToJoin);
+router.get("/:code/joinReq", verifyJWT, classController.requestToJoin);
 router.get("/:code/join", verifyJWT, classController.joinClass);
 router.get("/:code/leave", verifyJWT, classController.leaveClass);
 

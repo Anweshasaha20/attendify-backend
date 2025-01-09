@@ -7,7 +7,9 @@ class AttendanceController {
     // Example: Record check-in time in the database
     return res
       .status(200)
-      .json(ApiResponse.success({ checkIn: new Date() }, "Checked in successfully"));
+      .json(
+        ApiResponse.success({ checkIn: new Date() }, "Checked in successfully")
+      );
   });
 
   checkOut = asyncHandler(async (req, res) => {
@@ -15,7 +17,12 @@ class AttendanceController {
     // Example: Record check-out time in the database
     return res
       .status(200)
-      .json(ApiResponse.success({ checkOut: new Date() }, "Checked out successfully"));
+      .json(
+        ApiResponse.success(
+          { checkOut: new Date() },
+          "Checked out successfully"
+        )
+      );
   });
 
   getHistory = asyncHandler(async (req, res) => {
@@ -23,7 +30,9 @@ class AttendanceController {
     // Example: Retrieve attendance history from the database
     return res
       .status(200)
-      .json(ApiResponse.success({ attendance: [] }, "Attendance history retrieved"));
+      .json(
+        ApiResponse.success({ attendance: [] }, "Attendance history retrieved")
+      );
   });
 
   getStats = asyncHandler(async (req, res) => {

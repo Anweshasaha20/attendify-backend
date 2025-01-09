@@ -8,5 +8,6 @@ router.put("/profile", verifyJWT, userController.updateProfile);
 router.delete("/profile", verifyJWT, userController.deleteUser);
 router.put("/password", verifyJWT, userController.changePassword);
 router.get("/all", verifyJWT, userController.getAllUsers);
+router.get("/upcoming", verifyJWT, userController.getUpcomingSessions);
 
 export default router;
